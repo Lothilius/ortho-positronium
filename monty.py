@@ -4,11 +4,11 @@ import csv
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
+
 
 #ABC_Glass_center.Spe
 #Set apropriate directory depending on where I am working from.
-inputFileDer = "/Users/admin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/Lower_amp/"
+inputFileDer = "/Users/martin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/Lower_amp/"
 directory = []
 for file in os.listdir("/Users/"):
     if file is "admin":
@@ -28,71 +28,109 @@ def arrayFromFile(filename):
             dataArray.append(row)
     return dataArray
 
+
 #Extract data from the list made from reading the file
 def cleanData(data):
     """Once a file has been read and placed in list
         package the data so that it is useful"""
     newData = []
-    for i in range(12,16394):
-        element = data[i][0].lstrip()
+    for i in range(12, 16394):
+        element = int(data[i][0].lstrip())
         newData.append(element)
-    print type(newData)
 
-    newData = np.array(newData)
-    print type(newData)
+    #newData = np.array(newData)
     return newData
+
 
 #plot data
 def plotevents(datalist):
     x = range(0, len(datalist))
     x = np.array(x)
+    y = datalist
 
-    #Make the plot
-    axScatter = plt.subplot(111)
-    axScatter.scatter(x, datalist)
-    axScatter.set_aspect(1.)
-
-    from mpl_toolkits.axes_grid1 import make_axes_locatable
-    #create the axes
-    divider = make_axes_locatable(axScatter)
-    axHistx = divider.append_axes("top", 1.2, pad=0.1, sharex=axScatter)
-
-    # now determine nice limits by hand:
-    binwidth = 0.25
-
-    xymax = np.max([np.max(np.fabs(x)), np.max(np.fabs(datalist))])
-    lim = ( int(xymax/binwidth) + 1) * binwidth
-    bins = np.arange(-lim, lim + binwidth, binwidth)
-    axHistx.hist(datalist, bins=bins)
-
-    #axHistx.axis["bottom"].major_ticklabels.set_visible(False)
-    for tl in axHistx.get_xticklabels():
-        tl.set_visible(False)
-    axHistx.set_yticks([0, 50, 100])
-
-    #axHisty.axis["left"].major_ticklabels.set_visible(False)
-    for tl in axHisty.get_yticklabels():
-        tl.set_visible(False)
-    axHisty.set_xticks([0, 50, 100])
+    plt.plot(x,y)
+    #fig, ax = plt.subplots()
+    plt.scatter(x,y, marker=".")
 
     plt.draw()
     plt.show()
+    return "done"
+
+#Combine the data of two runs in a monte carlo manor
+def combine(run1, run2):
+    """Combines the two sets of data for the files entered
+    at the beginning of the program"""
+    data1 = arrayFromFile(inputFileDer + run1)
+    data1 = cleanData(data1)
+
+    data2 = arrayFromFile(inputFileDer + run1)
+    data2 = cleanData(data2)
+
+    prob1 = getprob(data1)
+    prob2 = getprob(data2)
+
+    createcounts(prob1, prob2)
+
+#Create a range of randum numbers.
+def rndnumbers(binrng, totcounts):
+    numbers = []
+    for i in range(0, totcounts):
+         numbers.append(np.random.random_integers(binrng))
+
+    return numbers
+
+#given lists of counts for each bin spit out the coincidence plot
+def createcounts(prob1, prob2):
+    coin = [0] * 16382
+
+    number1 = rndnumbers(len(prob1), 10000)
+    number2 = rndnumbers(len(prob2), 10000)
+
+    for item in number1:
+        binnum = prob1[item]
+        coin[binnum] += 1
+
+    for item in number2:
+        binnum = prob2[item]
+        coin[binnum] += 1
+
+    plotevents(coin)
+
+
+
+
+
+#Create a probability array with the number of events in a bin is the number of occurances in the array for the bin.
+#Items in array are bin numbers.
+def getprob(data):
+    problist = []
+
+    for i, item in enumerate(data):
+        while (item is not 0):
+           problist.append(i)
+           item -= 1
+
+
+    return problist
 
 
 def main():
-    fileName = raw_input("Type in file name: ")
-    print(fileName)
-    data = arrayFromFile(inputFileDer + fileName)
-    data = cleanData(data)
+    file1 = "ACal_2.Spe" #raw_input("Type in file name: ")
+    file2 = "BCal_2.Spe" #raw_input("Type in file name: ")
+    combine(file1,file2)
 
-    plotevents(data)
+    #plotevents(data)
 
     return "done"
 
 
-main()
+
 while True:
     try:
+        request = input("Would you like to plot, or create a coincidence?")
+        if request is "plot":
+            file = input("Please enter full directory and file name: ")
+            
         main()
     except:
         print "error"
