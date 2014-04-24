@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 #ABC_Glass_center.Spe
 #Set apropriate directory depending on where I am working from.
-inputFileDer = "/Users/martin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/Lower_amp/"
+inputFileDer = "/Users/admin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/Lower_amp/"
 directory = []
 for file in os.listdir("/Users/"):
     if file is "admin":
@@ -34,7 +34,7 @@ def cleanData(data):
     """Once a file has been read and placed in list
         package the data so that it is useful"""
     newData = []
-    for i in range(12, 16394):
+    for i in range(13, 16394):
         element = int(data[i][0].lstrip())
         newData.append(element)
 
@@ -48,57 +48,78 @@ def plotevents(datalist):
     x = np.array(x)
     y = datalist
 
-    plt.plot(x,y)
+    #plt.plot(x,y, linestyle=None)
     #fig, ax = plt.subplots()
-    plt.scatter(x,y, marker=".")
+    plt.scatter(x,y,s=20, marker='.', c='blue')
 
-    plt.draw()
     plt.show()
     return "done"
 
 #Combine the data of two runs in a monte carlo manor
-def combine(run1, run2):
+def combine(run1, run2, run3):
     """Combines the two sets of data for the files entered
     at the beginning of the program"""
     data1 = arrayFromFile(inputFileDer + run1)
     data1 = cleanData(data1)
+    plotevents(data1)
 
-    data2 = arrayFromFile(inputFileDer + run1)
+    data2 = arrayFromFile(inputFileDer + run2)
     data2 = cleanData(data2)
 
     prob1 = getprob(data1)
     prob2 = getprob(data2)
 
-    createcounts(prob1, prob2)
+    if run3 is not 0:
+        data3 = arrayFromFile(inputFileDer + run3)
+        data3 = cleanData(data3)
+
+        prob3 = getprob(data3)
+
+    createcounts(prob1, prob2, prob3)
 
 #Create a range of randum numbers.
 def rndnumbers(binrng, totcounts):
     numbers = []
     for i in range(0, totcounts):
-         numbers.append(np.random.random_integers(binrng))
-
+         numbers.append(np.random.random_integers(binrng-1))
     return numbers
 
-#given lists of counts for each bin spit out the coincidence plot
-def createcounts(prob1, prob2):
-    coin = [0] * 16382
+#Given lists of counts for each bin spit out the coincidence plot
+def createcounts(prob1, prob2, prob3):
+    coin = [0] * 16383
+    counts1 = []
+    counts2 = []
+    counts3 = []
 
-    number1 = rndnumbers(len(prob1), 10000)
-    number2 = rndnumbers(len(prob2), 10000)
+    #Create three lists of 10000 random numbers
+    number1 = rndnumbers(len(prob1), 10000000)
+    number2 = rndnumbers(len(prob2), 10000000)
+    number3 = rndnumbers(len(prob3), 10000000)
+    print(len(prob1), len(prob2), len(prob3))
 
     for item in number1:
         binnum = prob1[item]
-        coin[binnum] += 1
+        counts1.append(binnum)
 
     for item in number2:
         binnum = prob2[item]
-        coin[binnum] += 1
+        counts2.append(binnum)
+
+    for item in number3:
+        binnum = prob3[item]
+        counts3.append(binnum)
+
+
+    for i in range(len(counts3)):
+        binnum = counts1[i] + counts2[i] + counts3[i]
+        if binnum < len(coin):
+            coin[binnum] += 1
+
+    print(len(coin))
+
+    #for item in binnum:
 
     plotevents(coin)
-
-
-
-
 
 #Create a probability array with the number of events in a bin is the number of occurances in the array for the bin.
 #Items in array are bin numbers.
@@ -117,7 +138,9 @@ def getprob(data):
 def main():
     file1 = "ACal_2.Spe" #raw_input("Type in file name: ")
     file2 = "BCal_2.Spe" #raw_input("Type in file name: ")
-    combine(file1,file2)
+    file3 = "CCal_2.Spe"
+
+    combine(file1, file2, file3)
 
     #plotevents(data)
 
@@ -125,18 +148,20 @@ def main():
 
 
 
-while True:
-    try:
-        request = input("Would you like to plot, or create a coincidence?")
-        if request is "plot":
-            file = input("Please enter full directory and file name: ")
-            
-        main()
-    except:
-        print "error"
-    print "\n\nWould you like to start another capture" \
-          + " session? (Y/N)"
-    Doagain = str(raw_input(""))
-    if ('Y' not in Doagain) and ('y' not in Doagain):
-        print "Good Bye!"
-        break
+main()
+def commentout():
+    while True:
+        try:
+            request = input("Would you like to plot, or create a coincidence?")
+            if request is "plot":
+                file = input("Please enter full directory and file name: ")
+
+            main()
+        except:
+            print "error"
+        print "\n\nWould you like to start another capture" \
+              + " session? (Y/N)"
+        Doagain = str(raw_input(""))
+        if ('Y' not in Doagain) and ('y' not in Doagain):
+            print "Good Bye!"
+            break
