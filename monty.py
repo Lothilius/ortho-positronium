@@ -114,23 +114,41 @@ def getprob(data):
     return problist
 
 
+#"/Users/martin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/Lower_amp/"
+
 def main():
-    file1 = "ACal_2.Spe" #raw_input("Type in file name: ")
-    file2 = "BCal_2.Spe" #raw_input("Type in file name: ")
-    combine(file1,file2)
+    request = str(raw_input("Would you like to plot, or create a coincidence? "))
+    if 'plot' in request:
+        thefile = str(raw_input("Please enter full directory and file name: "))
+        data1 = arrayFromFile(thefile)
+        data1 = cleanData(data1)
+        plotevents(data1)
+    elif "coin" in request:
+        filesnum = str(raw_input("How many coincidence files are there 2 or 3? "))
+        inputFileDer = str(raw_input("Please enter path to files: "))
+        if filesnum is 2:
+            file1 = inputFileDer + str(raw_input("Type in 1st file name: ")) #"ACal_2.Spe"
+            file2 = inputFileDer + str(raw_input("Type in 2nd file name: ")) #"BCal_2.Spe"
 
-    #plotevents(data)
+            combine(file1,file2)
 
-    return "done"
+        elif filesnum is 3:
+            file1 = raw_input("Type in 1st file name: ") #"ACal_2.Spe"
+            file2 = raw_input("Type in 2nd file name: ") #"BCal_2.Spe"
+            file3 = raw_input("Type in 3rd file name: ") #"CCal_2.Spe"
 
+            combine(file1,file2)
+            print("done")
+            #plotevents(data)
+        else:
+            ValueError
+
+    else:
+        ValueError
 
 
 while True:
     try:
-        request = input("Would you like to plot, or create a coincidence?")
-        if request is "plot":
-            file = input("Please enter full directory and file name: ")
-            
         main()
     except:
         print "error"
