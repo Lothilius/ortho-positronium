@@ -49,7 +49,6 @@ def combine(run1, run2, run3, inputFileDer):
     at the beginning of the program"""
     data1 = arrayFromFile(inputFileDer + run1)
     data1 = cleanData(data1)
-    plotevents(data1)
 
     data2 = arrayFromFile(inputFileDer + run2)
     data2 = cleanData(data2)
