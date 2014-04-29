@@ -19,7 +19,7 @@ def arrayFromFile(filename):
 
 #Extract data from the list made from reading the file
 def cleanData(data):
-    """Once a file has been read and placed in list
+    """Once a file has been read and placed in list,
         package the data so that it is useful"""
     newData = []
     for i in range(13, 16394):
