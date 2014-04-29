@@ -44,7 +44,7 @@ def plotevents(datalist):
     return "done"
 
 #Combine the data of two runs in a monte carlo manor
-def combine(run1, run2, run3):
+def combine(run1, run2, run3, inputFileDer):
     """Combines the two sets of data for the files entered
     at the beginning of the program"""
     data1 = arrayFromFile(inputFileDer + run1)
