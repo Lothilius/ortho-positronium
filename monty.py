@@ -73,7 +73,7 @@ def rndnumbers(binrng, totcounts):
 
 #Given lists of counts for each bin spit out the coincidence plot
 def createcounts(prob1, prob2, prob3):
-    coin = [0] * 16383
+    coin = [0] * len(prob1)
     counts1 = []
     counts2 = []
     counts3 = []
