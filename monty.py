@@ -22,7 +22,7 @@ def cleanData(data):
     """Once a file has been read and placed in list,
         package the data so that it is useful"""
     newData = []
-    for i in range(13, 16394):
+    for i in range(12, 524):
         element = int(data[i][0].lstrip())
         newData.append(element)
 
