@@ -5,18 +5,6 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-#ABC_Glass_center.Spe
-#Set apropriate directory depending on where I am working from.
-inputFileDer = "/Users/admin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/Lower_amp/"
-directory = []
-for file in os.listdir("/Users/"):
-    if file is "admin":
-        print file
-        inputFileDer = "/Users/admin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/Lower_amp/"
-
-fileName = ""
-
 #Pull data from CSV file
 def arrayFromFile(filename):
     """Given an external file containing numbers,
