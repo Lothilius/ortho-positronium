@@ -9,14 +9,15 @@ import os
 
 
 
-def norm(dataarray1, dataarray2):
-    dataarray1 = np.array(dataarray1)
-    dataarray2 = np.array(dataarray2)
+def normlize(data_small, data_large, binnum):
+    """Normalizes the data of the larger count data_large
+    :rtype : numpy array
+    according to the count rate of data_small"""
+    data_small = np.array(data_small)
+    data_large = np.array(data_large)
 
-    newlist = np.subtract(dataarray2, dataarray1)
-    newlist = np.divide(newlist, dataarray2)
-    newlist = np.subtract(1, newlist)
-    finlist = np.multiply(newlist, dataarray2)
+    newlist = np.divide(data_small, data_large[binnum])
+    finlist = np.multiply(newlist, data_large)
     return finlist
 
 #write an array to a file.
@@ -33,15 +34,15 @@ def arrayTofile(dataArray, fileNum):
 def main():
     for file in os.listdir("/Users/"):
         if file == "martin":
-            inputFileDer = "/Users/martin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/Lower_amp/"
+            inputFileDer = "/Users/martin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/HV_Failure/"
             outputfiledir = "/Users/martin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/play_data/"
         elif file is 'admin':
-            inputFileDer = "/Users/admin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/Lower_amp/"
+            inputFileDer = "/Users/admin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/HV_Failure/"
             outputfiledir = "/Users/admin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/play_data/"
 
 
-    file1 = arrayFromFile(inputFileDer + 'ACal_3.Spe') #raw_input("Type in file name: ")
-    file2 = "BCal_2.Spe" #raw_input("Type in file name: ")
+    file1 = arrayFromFile(inputFileDer + 'ACal_5.Spe') #raw_input("Type in file name: ")
+    file2 = "BCal_5.Spe"  #raw_input("Type in file name: ")
     file3 = arrayFromFile(inputFileDer + 'CCal_3.Spe')
     file1 = cleanData(file1)
     file3 = cleanData(file3)
