@@ -32,7 +32,10 @@ def arrayFromFile(filename):
 #Extract data from the list made from reading the file
 def cleanData(data):
     """Once a file has been read and placed in list
-        package the data so that it is useful"""
+        package the data so that it is useful
+
+    Returns array with data from bins 12 through 16394
+    """
     newData = []
     for i in range(12, 16394):
         element = int(data[i][0].lstrip())
@@ -42,8 +45,11 @@ def cleanData(data):
     return newData
 
 
-#plot data
 def plotevents(datalist):
+    """Plot data
+
+    Returns string done
+    """
     x = range(0, len(datalist))
     x = np.array(x)
     y = datalist
@@ -56,10 +62,12 @@ def plotevents(datalist):
     plt.show()
     return "done"
 
-#Combine the data of two runs in a monte carlo manor
 def combine(run1, run2):
     """Combines the two sets of data for the files entered
-    at the beginning of the program"""
+    at the beginning of the program
+
+    Return none
+    """
     data1 = arrayFromFile(inputFileDer + run1)
     data1 = cleanData(data1)
 
@@ -71,16 +79,24 @@ def combine(run1, run2):
 
     createcounts(prob1, prob2)
 
-#Create a range of randum numbers.
+
 def rndnumbers(binrng, totcounts):
+    """Create a range of random numbers.
+
+    Return array of random numbers
+    """
     numbers = []
     for i in range(0, totcounts):
          numbers.append(np.random.random_integers(binrng))
 
     return numbers
 
-#given lists of counts for each bin spit out the coincidence plot
+
 def createcounts(prob1, prob2):
+    """Given lists of counts for each bin spit out the coincidence plot
+
+    Return none
+    """
     coin = [0] * 16382
 
     number1 = rndnumbers(len(prob1), 10000)
@@ -97,12 +113,12 @@ def createcounts(prob1, prob2):
     plotevents(coin)
 
 
-
-
-
-#Create a probability array with the number of events in a bin is the number of occurances in the array for the bin.
-#Items in array are bin numbers.
 def getprob(data):
+    """Create a probability array with the number of events in a bin is the number of occurrences in the array
+    for the bin.Items in array are bin numbers.
+
+    Return array containing bin numbers that occurred.
+    """
     problist = []
 
     for i, item in enumerate(data):
@@ -113,8 +129,6 @@ def getprob(data):
 
     return problist
 
-
-#"/Users/martin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/Lower_amp/"
 
 def main():
     request = str(raw_input("Would you like to plot, or create a coincidence? "))
