@@ -166,7 +166,6 @@ def main():
 
 
 while True:
-    main()
     try:
         main()
     except:
