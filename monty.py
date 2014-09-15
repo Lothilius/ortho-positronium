@@ -6,17 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-#ABC_Glass_center.Spe
-#Set apropriate directory depending on where I am working from.
-inputFileDer = "/Users/martin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/Lower_amp/"
-directory = []
-for file in os.listdir("/Users/"):
-    if file is "admin":
-        print file
-        inputFileDer = "/Users/admin/Dropbox/School/Spring-2014/PHY-474/Labs/Positronium/data/Enclosed/Lower_amp/"
-
-fileName = ""
-
 #Pull data from CSV file
 def arrayFromFile(filename):
     """Given an external file containing numbers,
@@ -62,16 +51,17 @@ def plotevents(datalist):
     plt.show()
     return "done"
 
+
 def combine(run1, run2):
     """Combines the two sets of data for the files entered
     at the beginning of the program
 
     Return none
     """
-    data1 = arrayFromFile(inputFileDer + run1)
+    data1 = arrayFromFile(run1)
     data1 = cleanData(data1)
 
-    data2 = arrayFromFile(inputFileDer + run1)
+    data2 = arrayFromFile(run2)
     data2 = cleanData(data2)
 
     prob1 = getprob(data1)
@@ -140,18 +130,18 @@ def main():
     elif "coin" in request:
         filesnum = str(raw_input("How many coincidence files are there 2 or 3? "))
         inputFileDer = str(raw_input("Please enter path to files: "))
-        if filesnum is 2:
+        if filesnum == '2':
             file1 = inputFileDer + str(raw_input("Type in 1st file name: ")) #"ACal_2.Spe"
             file2 = inputFileDer + str(raw_input("Type in 2nd file name: ")) #"BCal_2.Spe"
 
-            combine(file1,file2)
+            combine(file1, file2)
 
-        elif filesnum is 3:
+        elif filesnum == '3':
             file1 = raw_input("Type in 1st file name: ") #"ACal_2.Spe"
             file2 = raw_input("Type in 2nd file name: ") #"BCal_2.Spe"
             file3 = raw_input("Type in 3rd file name: ") #"CCal_2.Spe"
 
-            combine(file1,file2)
+            combine(file1, file2)
             print("done")
             #plotevents(data)
         else:
@@ -162,12 +152,12 @@ def main():
 
 
 while True:
+    main()
     try:
         main()
     except:
         print "error"
-    print "\n\nWould you like to start another capture" \
-          + " session? (Y/N)"
+    print "\n\nWould you like to start another session? (Y/N)"
     Doagain = str(raw_input(""))
     if ('Y' not in Doagain) and ('y' not in Doagain):
         print "Good Bye!"
